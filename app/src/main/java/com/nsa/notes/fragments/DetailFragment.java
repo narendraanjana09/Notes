@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.nsa.notes.MainActivity;
 import com.nsa.notes.R;
 import com.nsa.notes.databinding.FragmentDetailBinding;
 import com.nsa.notes.extra.FireBase;
@@ -84,6 +85,36 @@ public class DetailFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.listener=new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                showToast("back pressed in detail");
+            }
+        };
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.listener=null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainActivity.listener=null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MainActivity.listener=null;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

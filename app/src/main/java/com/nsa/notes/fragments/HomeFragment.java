@@ -12,10 +12,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +58,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.nsa.notes.MainActivity;
 import com.nsa.notes.R;
 import com.nsa.notes.adapters.HomeAdapter;
 import com.nsa.notes.adapters.OnNoteClickListener;
@@ -106,6 +110,8 @@ public class HomeFragment extends Fragment {
     private GoogleSignInAccount account;
 
 
+
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -128,6 +134,7 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +145,8 @@ public class HomeFragment extends Fragment {
         viewModel= ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
                 .create(MainViewModel.class);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -157,6 +166,41 @@ public class HomeFragment extends Fragment {
         super.onResume();
         setStatusBarBlack();
         Keyboard.hide(getView());
+        MainActivity.listener=new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                if(MainActivity.isInAdd){
+                 binding.back1.callOnClick();
+                    setStatusBarBlack();
+                    MainActivity.isInAdd=false;
+                    Log.e(TAG, "onBackPressed: isInAdd" );
+                }
+                if(MainActivity.isInSelect){
+                    binding.cancelSelectBtn.callOnClick();
+                   cancelSelect();
+                    Log.e(TAG, "onBackPressed: isInSelect" );
+                }
+
+            }
+        };
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.listener=null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainActivity.listener=null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MainActivity.listener=null;
     }
 
     @Override
@@ -203,9 +247,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onLongClick() {
+                MainActivity.isInSelect=true;
                 if(isSelectPos){
+
                     binding.selectFromPosBTN.callOnClick();
                 }else{
+
                 setSatusBarWhite();
                 Keyboard.hide(view);
                binding.selectedBTN.callOnClick();
@@ -280,9 +327,7 @@ public class HomeFragment extends Fragment {
                 super.onChanged();
                 if(notesList.size()==0){
                     binding.gifImage.setVisibility(View.VISIBLE);
-                    Log.e(TAG, "onChanged: visible " );
                 }else{
-                    Log.e(TAG, "onChanged: invisible " );
                     binding.gifImage.setVisibility(View.GONE);
                 }
             }
@@ -297,6 +342,7 @@ public class HomeFragment extends Fragment {
                         new FireBase().userDataReference.child(firebaseUser.getUid()).child(noteModel.getTimeStamp()).removeValue();
                     }
                 }
+                MainActivity.isInSelect=false;
                 binding.selectedBTN.callOnClick();
                 setStatusBarBlack();
                 adapter.selectAll(false);
@@ -511,6 +557,7 @@ public class HomeFragment extends Fragment {
 
                 closeKeyboard();
                 binding.titleEd.requestFocus();
+                MainActivity.isInAdd=true;
                 new CountDownTimer(600, 600) {
                     @Override
                     public void onTick(long l) {
@@ -530,15 +577,7 @@ public class HomeFragment extends Fragment {
         binding.cancelSelectBtn.setOnTouchListener((view1, motionEvent) -> {
 
             if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-                setStatusBarBlack();
-                adapter.selectAll(false);
-                adapter.disableSelection();
-                adapter.notifyDataSetChanged();
-
-
-                isSelectPos=false;
-                binding.aboveImg.setVisibility(View.VISIBLE);
-                binding.belowImg.setVisibility(View.GONE);
+                cancelSelect();
             }
             return false;
         });
@@ -568,6 +607,7 @@ public class HomeFragment extends Fragment {
 
             if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                 closeKeyboard();
+                MainActivity.isInAdd=false;
                 setStatusBarBlack();
 
             }
@@ -587,6 +627,7 @@ public class HomeFragment extends Fragment {
 
                     binding.back1.callOnClick();
                     setStatusBarBlack();
+                    MainActivity.isInAdd=false;
                     binding.titleEd.setText("");
                     binding.descriptionEd.setText("");
                     closeKeyboard();
@@ -633,6 +674,18 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
+    private void cancelSelect() {
+        setStatusBarBlack();
+        adapter.selectAll(false);
+        adapter.disableSelection();
+        adapter.notifyDataSetChanged();
+        MainActivity.isInSelect=false;
+        isSelectPos=false;
+        binding.aboveImg.setVisibility(View.VISIBLE);
+        binding.belowImg.setVisibility(View.GONE);
+    }
+
 
     private void updateUserObject() {
         account= GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -769,5 +822,9 @@ public class HomeFragment extends Fragment {
     private void setEmpty() {
         binding.searchImg.setVisibility(View.GONE);
         binding.clearImg.setVisibility(View.VISIBLE);
+
     }
+
+
+
 }
