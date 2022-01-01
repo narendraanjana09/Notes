@@ -70,6 +70,14 @@
 
 
     <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/gifLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:alpha="1"
+            motion:layout_constraintTop_toBottomOf="@id/home_layout"
+            motion:layout_constraintBottom_toTopOf="@id/add_notes_btn"
+            />
     </ConstraintSet>
 
 
@@ -223,10 +231,11 @@
             />
         <Constraint
             android:id="@+id/gifLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="1dp"
             android:alpha="0"
             motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
             />
         <Constraint
             android:id="@+id/add_notes_btn"

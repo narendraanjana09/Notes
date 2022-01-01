@@ -33,4 +33,8 @@ public class MainRepository {
     public void delete(NoteModel noteModel) {
         new DeleteNote(noteDao).execute(noteModel);
     }
+    public void deleteALl() {
+        new DeleteAll(noteDao).execute();
+    }
+
 }

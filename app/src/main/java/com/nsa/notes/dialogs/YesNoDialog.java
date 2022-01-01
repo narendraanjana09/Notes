@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class YesNoDialog extends DialogFragment {
 
-    private TextView titleTV,messageTV1,yesTV,noTV;
+    private TextView titleTV,messageTV1,yesTV,noTV,deleteTV;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -44,6 +44,7 @@ public class YesNoDialog extends DialogFragment {
         titleTV=view.findViewById(R.id.titleTv);
         messageTV1=view.findViewById(R.id.messageTV1);
         noTV=view.findViewById(R.id.no_txt);
+        deleteTV=view.findViewById(R.id.delete_txt);
 
         return view;
     }
@@ -62,6 +63,7 @@ public class YesNoDialog extends DialogFragment {
         }
         titleTV.setText(title);
         messageTV1.setText(message);
+        deleteTV.setText(deleteTXT);
 
 
         if(!yesText.isEmpty()){
@@ -81,6 +83,15 @@ public class YesNoDialog extends DialogFragment {
                 }
             }
         });
+        deleteTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onDeleteClickListener!=null){
+                    getDialog().dismiss();
+                    onDeleteClickListener.OnClick();
+                }
+            }
+        });
         noTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +104,7 @@ public class YesNoDialog extends DialogFragment {
     }
 
 
-    private String title="",message="",yesText="",noText="";
+    private String title="",message="",yesText="",noText="",deleteTXT="";
 
     public void setTitle(String title) {
         this.title = title;
@@ -105,11 +116,17 @@ public class YesNoDialog extends DialogFragment {
 
     private OnClickListener onYesClickListener;
     private OnClickListener onNoClickListener;
+    private OnClickListener onDeleteClickListener;
 
     public void setYesText(String yesText,OnClickListener onClickListener) {
         this.onYesClickListener=onClickListener;
        this.yesText=yesText;
     }
+    public void setDeleteText(String deleteTXT,OnClickListener onClickListener) {
+        this.onDeleteClickListener=onClickListener;
+        this.deleteTXT=deleteTXT;
+    }
+
 
     public void setNoText(String noText,OnClickListener onClickListener) {
         this.onNoClickListener=onClickListener;

@@ -181,10 +181,6 @@ public class DetailFragment extends Fragment {
             showToast("please enter title!");
             return false;
         }
-        if(title.length()<5){
-            showToast("title must have atleast 5 characters!");
-            return false;
-        }
         if(descrp.isEmpty()){
             showToast("please enter description!");
             return false;

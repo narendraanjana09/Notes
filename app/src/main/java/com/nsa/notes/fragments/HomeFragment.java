@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -155,6 +156,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setStatusBarBlack();
+        Keyboard.hide(getView());
     }
 
     @Override
@@ -187,6 +189,7 @@ public class HomeFragment extends Fragment {
 
         binding.homeRecycleview.setLayoutManager(new GridLayoutManager(getContext(),2));
         binding.homeRecycleview.setAdapter(adapter);
+
 
 
         adapter.setListener(new OnNoteClickListener() {
@@ -257,22 +260,32 @@ public class HomeFragment extends Fragment {
                 binding.upDownBtn.setAlpha(0f);
                 binding.upDownBtn.setClickable(false);
                 binding.searchEdt.setEnabled(false);
-                binding.gifLayout.setAlpha(1f);
             }else{
-                binding.gifLayout.setAlpha(0f);
+
                 binding.searchEdt.setEnabled(true);
                 binding.upDownBtn.setClickable(true);
-
                 binding.upDownBtn.setAlpha(1f);
                 notesList.addAll(list);
                 if(new SavedText(getContext()).getText("sync").equals("on")){
                     syncNotesToServer(list);
                 }else{
                 }
-
             }
             adapter.setList(notesList);
             adapter.notifyDataSetChanged();
+        });
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if(notesList.size()==0){
+                    binding.gifImage.setVisibility(View.VISIBLE);
+                    Log.e(TAG, "onChanged: visible " );
+                }else{
+                    Log.e(TAG, "onChanged: invisible " );
+                    binding.gifImage.setVisibility(View.GONE);
+                }
+            }
         });
         binding.deleteSelectedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -343,9 +356,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         YesNoDialog yesNoDialog=new YesNoDialog();
-                        yesNoDialog.setTitle("Sign-Out Request");
+                        yesNoDialog.setTitle("Sign-Out Request!");
                         yesNoDialog.setMessage("Do You Really Want To Sign-Out?");
-                        yesNoDialog.setYesText("Yes", new YesNoDialog.OnClickListener() {
+                        yesNoDialog.setYesText("sign-out", new YesNoDialog.OnClickListener() {
                             @Override
                             public void OnClick() {
                                 dataLayout.setVisibility(View.GONE);
@@ -357,19 +370,48 @@ public class HomeFragment extends Fragment {
                                     public void onSuccess(Void unused) {
                                         binding.profileImgBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_baseline_person_24));
                                         binding.text1.setText("Hello There,");
+                                        joinedDateTV.setText("");
                                         dataLayout.setVisibility(View.GONE);
                                         progressBar.setVisibility(View.GONE);
                                         signInLayout.setVisibility(View.VISIBLE);
                                         updateUserObject();
+                                        new SavedText(getContext()).setText("joinDate","");
                                         new SavedText(getContext()).setText("sync","off");
                                     }
                                 });
                             }
                         });
-                        yesNoDialog.setNoText("No", new YesNoDialog.OnClickListener() {
+                        yesNoDialog.setNoText("cancel", new YesNoDialog.OnClickListener() {
                             @Override
                             public void OnClick() {
 
+                            }
+                        });
+                        yesNoDialog.setDeleteText("delete account & data", new YesNoDialog.OnClickListener() {
+                            @Override
+                            public void OnClick() {
+                                dataLayout.setVisibility(View.GONE);
+                                signInLayout.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.VISIBLE);
+                                viewModel.deleteAll();
+                                new FireBase().userDataReference.child(firebaseUser.getUid()).removeValue();
+                                new FireBase().userReference.child(firebaseUser.getUid()).removeValue();
+                                mfirebaseAuth.signOut();
+                                mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        binding.profileImgBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_baseline_person_24));
+                                        binding.text1.setText("Hello There,");
+                                        dataLayout.setVisibility(View.GONE);
+                                        joinedDateTV.setText("");
+                                        progressBar.setVisibility(View.GONE);
+                                        signInLayout.setVisibility(View.VISIBLE);
+                                        updateUserObject();
+                                        new SavedText(getContext()).setText("sync","off");
+                                        new SavedText(getContext()).setText("joinDate","");
+                                        showToast("Your Data Is Deleted");
+                                    }
+                                });
                             }
                         });
                         yesNoDialog.show(getParentFragmentManager(),"yesNo");
@@ -469,7 +511,17 @@ public class HomeFragment extends Fragment {
 
                 closeKeyboard();
                 binding.titleEd.requestFocus();
-                showKeyboard();
+                new CountDownTimer(600, 600) {
+                    @Override
+                    public void onTick(long l) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        showKeyboard();
+                    }
+                }.start();
                 setSatusBarWhite();
             }
             return false;
@@ -482,6 +534,7 @@ public class HomeFragment extends Fragment {
                 adapter.selectAll(false);
                 adapter.disableSelection();
                 adapter.notifyDataSetChanged();
+
 
                 isSelectPos=false;
                 binding.aboveImg.setVisibility(View.VISIBLE);
@@ -516,6 +569,7 @@ public class HomeFragment extends Fragment {
             if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                 closeKeyboard();
                 setStatusBarBlack();
+
             }
             return false;
         });
@@ -524,6 +578,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 String title=binding.titleEd.getText().toString().trim();
                 String descrp=binding.descriptionEd.getText().toString().trim();
+
                 if(checkNote(title,descrp)){
 
 
@@ -693,10 +748,6 @@ public class HomeFragment extends Fragment {
     private boolean checkNote(String title, String descrp) {
         if(title.isEmpty()){
             showToast("please enter title!");
-            return false;
-        }
-        if(title.length()<5){
-            showToast("title must have atleast 5 characters!");
             return false;
         }
         if(descrp.isEmpty()){

@@ -33,4 +33,7 @@ public class MainViewModel extends AndroidViewModel {
     public void delete(NoteModel noteModel) {
         repo.delete(noteModel);
     }
+    public void deleteAll( ) {
+        repo.deleteALl();
+    }
 }
