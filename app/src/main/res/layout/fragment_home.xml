@@ -294,8 +294,6 @@
             android:layoutAnimation="@anim/layout_animation_right_to_left"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_layout"
             tools:listitem="@layout/home_rv_item" />
         <ImageView
