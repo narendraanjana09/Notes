@@ -49,6 +49,7 @@
         <OnClick motion:targetId="@+id/up_down_btn" />
     </Transition>
 
+
     <Transition
         motion:constraintSetEnd="@+id/start"
         motion:constraintSetStart="@id/end_up"

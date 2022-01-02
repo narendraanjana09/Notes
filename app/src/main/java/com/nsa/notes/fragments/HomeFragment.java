@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -208,6 +209,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController=Navigation.findNavController(view);
+        getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         adapter=new HomeAdapter(getContext());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -222,8 +224,10 @@ public class HomeFragment extends Fragment {
         if(account!=null){
             Glide.with(getContext()).load(account.getPhotoUrl()).into(binding.profileImgBtn);
             String[] splited = account.getDisplayName().split(" ");
-            if(splited.length!=0){
-            binding.text1.setText("Hello "+splited[0]+",");
+            if(splited.length!=0 && !splited[0].trim().isEmpty()){
+                String name=splited[0];
+                name=(name.charAt(0)+"").toUpperCase()+name.substring(1,name.length());
+            binding.text1.setText("Hello "+name+",");
             }else{
                 binding.text1.setText("Hello There,");
             }
@@ -394,7 +398,6 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        closeKeyboard();
                     }
                 });
 
@@ -495,8 +498,10 @@ public class HomeFragment extends Fragment {
                                         Glide.with(getContext()).load(account.getPhotoUrl()).into(imageView);
                                         Glide.with(getContext()).load(account.getPhotoUrl()).into(binding.profileImgBtn);
                                         String[] splited = account.getDisplayName().split(" ");
-                                        if(splited.length!=0){
-                                            binding.text1.setText("Hello "+splited[0]+",");
+                                        if(splited.length!=0 && !splited[0].trim().isEmpty()){
+                                            String name=splited[0];
+                                            name=(name.charAt(0)+"").toUpperCase()+name.substring(1,name.length());
+                                            binding.text1.setText("Hello "+name+",");
                                         }else{
                                             binding.text1.setText("Hello There,");
                                         }

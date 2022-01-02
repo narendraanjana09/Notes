@@ -2,11 +2,13 @@ package com.nsa.notes.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -84,28 +86,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleTV,descrpTV,timeTV,dateTV;
+        private TextView titleTV, descrpTV, timeTV, dateTV;
         private MaterialCardView bottomCard;
         private ConstraintLayout constraintLayout;
         private AppCompatCheckBox checkBox;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleTV=itemView.findViewById(R.id.titleTV);
-            descrpTV=itemView.findViewById(R.id.descrpTV);
-            timeTV=itemView.findViewById(R.id.timeTV);
-            dateTV=itemView.findViewById(R.id.dateTV);
-            bottomCard=itemView.findViewById(R.id.bottom_card);
-            checkBox=itemView.findViewById(R.id.checkbox);
-            constraintLayout=itemView.findViewById(R.id.constraintLayout);
+            titleTV = itemView.findViewById(R.id.titleTV);
+            descrpTV = itemView.findViewById(R.id.descrpTV);
+            timeTV = itemView.findViewById(R.id.timeTV);
+            dateTV = itemView.findViewById(R.id.dateTV);
+            bottomCard = itemView.findViewById(R.id.bottom_card);
+            checkBox = itemView.findViewById(R.id.checkbox);
+            constraintLayout = itemView.findViewById(R.id.constraintLayout);
+
+
+            bottomCard.setRotation(-8f);
+
 
             bottomCard.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if(!isSelectionEnabled){
-                    isSelectionEnabled=true;
-                    selectedList.clear();
-                    listener.onLongClick();
-                    bottomCard.callOnClick();
+                    if (!isSelectionEnabled) {
+                        isSelectionEnabled = true;
+                        selectedList.clear();
+                        listener.onLongClick();
+                        bottomCard.callOnClick();
                     }
                     return true;
                 }
@@ -114,20 +122,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             bottomCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isSelectionEnabled){
-                        if(checkBox.isChecked()){
+                    if (isSelectionEnabled) {
+                        if (checkBox.isChecked()) {
                             checkBox.setChecked(false);
                             constraintLayout.setBackground(context.getDrawable(R.drawable.note_item_bg));
                             selectedList.remove(list.get(getAdapterPosition()));
-                        }else{
+                        } else {
                             checkBox.setChecked(true);
                             constraintLayout.setBackground(context.getDrawable(R.drawable.note_item_bg_select));
                             selectedList.add(list.get(getAdapterPosition()));
                         }
                         listener.selectedCounter(selectedList.size());
-                    }else{
+                    } else {
                         listener.onClick(list.get(getAdapterPosition()));
-                }
+                    }
                 }
             });
         }
@@ -137,9 +145,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
 
             checkBox.setChecked(selectAll);
-            if(selectAll){
+            if (selectAll) {
                 constraintLayout.setBackground(context.getDrawable(R.drawable.note_item_bg_select));
-            }else{
+            } else {
                 constraintLayout.setBackground(context.getDrawable(R.drawable.note_item_bg));
             }
 
@@ -149,15 +157,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             int green = randomGenerator.nextInt(256);
             int blue = randomGenerator.nextInt(256);
 
-            bottomCard.setCardBackgroundColor(Color.rgb(red,green,blue));
+            bottomCard.setCardBackgroundColor(Color.rgb(red, green, blue));
             titleTV.setText(noteModel.getTitle());
             descrpTV.setText(noteModel.getDescription());
 
-            String time=new SimpleDateFormat("hh:mm a").format(new Date(Long.parseLong(noteModel.getTimeStamp())));
-            String date=new SimpleDateFormat("dd/MM/yyyy").format(new Date(Long.parseLong(noteModel.getTimeStamp())));
+            String time = new SimpleDateFormat("hh:mm a").format(new Date(Long.parseLong(noteModel.getTimeStamp())));
+            String date = new SimpleDateFormat("dd/MM/yyyy").format(new Date(Long.parseLong(noteModel.getTimeStamp())));
 
             timeTV.setText(time);
             dateTV.setText(date);
         }
     }
+
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/introFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -18,10 +18,29 @@
             app:exitAnim="@anim/to_left"
             app:enterAnim="@anim/from_right"
             />
+        <action
+            android:id="@+id/action_homeFragment_to_introFragment"
+            app:destination="@id/introFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.nsa.notes.fragments.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.nsa.notes.fragments.IntroFragment"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
+        <action
+            android:id="@+id/action_introFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popExitAnim="@anim/to_right"
+            app:popUpTo="@id/introFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_left"
+            app:enterAnim="@anim/from_right"
+            />
+    </fragment>
 </navigation>

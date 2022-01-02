@@ -10,6 +10,7 @@
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/ic_baseline_note_add_24.xml" value="0.26458333333333334" />
+        <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/info_icon.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/note_item_bg.xml" value="0.22760416666666666" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/note_item_bg_select.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/save_bg1.xml" value="0.26458333333333334" />
@@ -17,8 +18,9 @@
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/drawable/search_background.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/activity_main.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/fragment_detail.xml" value="0.1865079365079365" />
-        <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/fragment_home.xml" value="0.176" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/fragment_home2.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/fragment_intro.xml" value="0.1" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/home_rv_item.xml" value="0.2484375" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/profile_layout.xml" value="0.20625" />
         <entry key="..\:/Users/Asus/Desktop/GooglePlayApps/Notes/app/src/main/res/layout/yes_no_dialog.xml" value="0.20104166666666667" />

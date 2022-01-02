@@ -229,6 +229,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/search_layout"
             android:layout_width="0dp"
@@ -299,8 +301,8 @@
             android:layout_marginTop="10dp"
             android:layoutAnimation="@anim/layout_animation_right_to_left"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/home_rv_item" />
         <ImageView
             android:id="@+id/back1"

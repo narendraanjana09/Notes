@@ -82,8 +82,6 @@ public class GoogleSignIn {
                     checkUserData(account,firebaseUser);
 
 
-                    showToast("Firebase Success");
-
 
                 }else{
                     listener.info(Constants.ERROR);
