@@ -326,7 +326,6 @@
             android:textColorHint="@color/status_bar1"
             app:layout_constraintStart_toStartOf="@id/back1"
             app:layout_constraintTop_toBottomOf="@id/back1"
-
             />
         <EditText
             android:id="@+id/description_ed"
