@@ -677,10 +677,17 @@ public class HomeFragment extends Fragment {
                 binding.searchEdt.requestFocus();
                 showKeyboard();
                 binding.searchEdt.setText("");
-            }}
+            }else{
+                    if(!isSearch){
+                    setSearch();
+                    binding.searchEdt.setText("");
+                    }
+                }
+            }
         });
 
     }
+    private boolean isSearch=true;
 
     private void cancelSelect() {
         setStatusBarBlack();
@@ -826,10 +833,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void setSearch() {
+        isSearch=true;
         binding.searchImg.setVisibility(View.VISIBLE);
         binding.clearImg.setVisibility(View.GONE);
     }
     private void setEmpty() {
+        isSearch=false;
         binding.searchImg.setVisibility(View.GONE);
         binding.clearImg.setVisibility(View.VISIBLE);
 
