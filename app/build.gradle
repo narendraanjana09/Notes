@@ -16,6 +16,7 @@ android {
         versionName "1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "GOOGLE_CLIENT_ID", "\"1018363210699-vcgp8ophisr9hjfn1qmv8meqqv9q478o.apps.googleusercontent.com\""
     }
 
     buildTypes {

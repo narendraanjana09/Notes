@@ -46,6 +46,7 @@ public class GoogleSignIn {
     private GoogleSignInAccount account;
     public final static int  RC_SIGN_IN=1234;
 
+
     public GoogleSignIn(Activity activity) {
         this.activity = activity;
         mfirebaseAuth=FirebaseAuth.getInstance();

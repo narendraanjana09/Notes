@@ -59,6 +59,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.nsa.notes.BuildConfig;
 import com.nsa.notes.MainActivity;
 import com.nsa.notes.R;
 import com.nsa.notes.adapters.HomeAdapter;
@@ -105,9 +106,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private MainViewModel viewModel;
     private NavController navController;
-    private GoogleSignInClient mGoogleSignInClient;
+
     private FirebaseAuth mfirebaseAuth;
     public static FirebaseUser firebaseUser;
+    private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
 
 
@@ -213,7 +215,7 @@ public class HomeFragment extends Fragment {
         adapter=new HomeAdapter(getContext());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getActivity().getString(R.string.google_signIn_key))
+                .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(getActivity(), gso);
@@ -717,11 +719,14 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
     private void syncNotesToServer(List<NoteModel> list) {
         if(list==null || list.size()==0){
             return;
         }
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            return;
+        }
+        firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference=new FireBase().userDataReference.child(firebaseUser.getUid());
         new SyncToServer(reference).execute(list);
     }
